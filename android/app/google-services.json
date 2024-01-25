@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "599799297587",
+    "project_id": "quiz-95636",
+    "storage_bucket": "quiz-95636.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599799297587:android:d1713112d26835e5529546",
+        "android_client_info": {
+          "package_name": "com.hariapp.untitled10"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFUH4VcMKl3qIeK2Of5fz9yJb-jcr-IX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
