@@ -256,3 +256,4 @@ class AppText extends StatelessWidget {
     );
   }
 }
+

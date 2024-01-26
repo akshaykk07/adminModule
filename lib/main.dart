@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled10/adminModule/adminDash.dart';
 
 
+import 'adminModule/Student/studentList.dart';
+import 'adminModule/Student/viewStudent.dart';
 import 'adminModule/addBanners.dart';
 import 'firebase_options.dart';
 
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home:AdminDash()
+        home:ViewProfile()
       ),
       designSize: Size(390, 844),
     );
