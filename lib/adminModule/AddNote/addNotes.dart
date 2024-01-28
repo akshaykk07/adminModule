@@ -85,7 +85,8 @@ class _AddNotesState extends State<AddNotes> {
         'Trade': selectedSclass,
         'year': selectedSyear,
         'Subject': selectedSsub,
-        'Url': uploadUrl
+        'Url': uploadUrl,
+        'CreateAt':DateTime.now()
       }).then((value) => Navigator.pop(context));
       // Now you can use the download URL as needed (e.g., store it in the database)
      // print('Download URL: $downloadURL');
@@ -98,6 +99,7 @@ class _AddNotesState extends State<AddNotes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Add Notes'),
         centerTitle: true,
