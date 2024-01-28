@@ -6,7 +6,7 @@ import 'AddNote/NoteList.dart';
 import 'AddNote/addNotes.dart';
 import 'Quiz/QuesList.dart';
 import 'Video/AddVideo.dart';
-import 'addBanners.dart';
+import 'Banner/addBanners.dart';
 
 const whiteone = Color(0xfff5f6f9);
 const customBalck = Color(0xff000000);

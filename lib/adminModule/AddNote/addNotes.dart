@@ -104,9 +104,9 @@ class _AddNotesState extends State<AddNotes> {
         title: const Text('Add Notes'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20).r,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20).r,
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             //  mainAxisAlignment: MainAxisAlignment.center,

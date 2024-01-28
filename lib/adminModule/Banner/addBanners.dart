@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -120,24 +121,24 @@ class _AddBannersState extends State<AddBanners> {
   }
 
   Future uploadImageToFirebase() async {
-    // if (_image == null) return;
-    //
-    // try {
-    //   String fileName = basename(_image!.path);
-    //   Reference firebaseStorageRef =
-    //   FirebaseStorage.instance.ref().child('Banners/$fileName');
-    //   UploadTask uploadTask = firebaseStorageRef.putFile(_image!);
-    //   TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-    //
-    //   String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-    //   setState(() {
-    //     _imageUrl = downloadUrl;
-    //   });
-    //
-    //   print("Image uploaded to Firebase: $_imageUrl");
-    // } on FirebaseException catch (e) {
-    //   print("Error uploading image: $e");
-    // }
+    if (_image == null) return;
+
+    try {
+      String fileName = basename(_image!.path);
+      Reference firebaseStorageRef =
+      FirebaseStorage.instance.ref().child('Banners/$fileName');
+      UploadTask uploadTask = firebaseStorageRef.putFile(_image!);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      setState(() {
+        _imageUrl = downloadUrl;
+      });
+      await FirebaseFirestore.instance.collection('Banners').add({"BannerUrl":_imageUrl,"CreatedAt":DateTime.now()});
+      print("Image uploaded to Firebase: $_imageUrl");
+    } on FirebaseException catch (e) {
+      print("Error uploading image: $e");
+    }
   }
 }
 
