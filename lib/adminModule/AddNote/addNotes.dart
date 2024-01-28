@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +11,6 @@ const whiteone = Color(0xfff5f6f9);
 const customBalck = Color(0xff000000);
 const white = Color(0xffFFFFFF);
 
-
 class AddNotes extends StatefulWidget {
   @override
   _AddNotesState createState() => _AddNotesState();
@@ -18,24 +18,38 @@ class AddNotes extends StatefulWidget {
 
 class _AddNotesState extends State<AddNotes> {
   File? selectedFile;
-  List<String> Studentyear = [
-    "First Year",
-    "Second Year",
-    "Third Year"
-  ];
+  List<String> Studentyear = ["First Year", "Second Year", "Third Year"];
   List<String> Studentclass = [
-    "Civil",
-    "Auto Mobile",
-    "Copa"
+    "Electrician",
+    "Fitter",
+    "Welder",
+    "Turner",
+    "Machinist",
+    "Mechanic (Motor Vehicle)",
+     "COPA",
+    "Instrument Mechanic",
+    "Electronics Mechanic",
+    "Plumber",
+    "Carpenter",
+    "Draughtsman (Civil/Mechanical)",
+    "Surveyor",
+    //"  Refrigeration and Air Conditioning Mechanic",
+    "Mechanic Diesel Engine",
+    "Mechanic Radio and Television",
+    // "Stenographer and Secretarial Assistant (English/Hindi)",
+    "Cutting and Sewing",
+    "Hair and Skin Care",
+    "Food Production (General)",
+    //"Food and Beverage Service Assistant",
+    "Health Sanitary Inspector",
   ];
-  List<String> Subject = [
-    "Cad",
-    "Auto Mobile",
-    "Es"
-  ];
+  List<String> Subject = ["Cad", "Auto Mobile", "Es"];
   String? selectedSyear;
   String? selectedSclass;
   String? selectedSsub;
+  String? uploadUrl;
+  final Tradecontollor = TextEditingController();
+
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -56,20 +70,30 @@ class _AddNotesState extends State<AddNotes> {
     }
 
     try {
-      Reference storageReference = FirebaseStorage.instance.ref().child('Notes/${DateTime.now()}.pdf');
+      Reference storageReference = FirebaseStorage.instance.ref().child(
+          'Notes/${DateTime.now()}.pdf');
       UploadTask uploadTask = storageReference.putFile(selectedFile!);
 
       await uploadTask.whenComplete(() => print('File Uploaded'));
 
       // Get the download URL
       String downloadURL = await storageReference.getDownloadURL();
-
+      setState(() {
+        uploadUrl = downloadURL;
+      });
+      await FirebaseFirestore.instance.collection('Notes').add({
+        'Trade': selectedSclass,
+        'year': selectedSyear,
+        'Subject': selectedSsub,
+        'Url': uploadUrl
+      }).then((value) => Navigator.pop(context));
       // Now you can use the download URL as needed (e.g., store it in the database)
-      print('Download URL: $downloadURL');
+     // print('Download URL: $downloadURL');
     } catch (e) {
       print('Error uploading file: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,112 +104,135 @@ class _AddNotesState extends State<AddNotes> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20,right: 20).r,
+          padding: const EdgeInsets.only(left: 20, right: 20).r,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            //  mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 20),
+              DropdownMenu(
+                hintText: "Select Trade",
+                menuStyle: const MenuStyle(
+                    backgroundColor: MaterialStatePropertyAll(white)),
+                controller: Tradecontollor,
+                enableFilter: true,
+                enableSearch: true,
+                requestFocusOnTap: true,
+                dropdownMenuEntries: Studentclass.map(
+                        (e) => DropdownMenuEntry(value: e, label: e)).toList(),
+                onSelected: (value) {
+                  setState(() {
+                    selectedSclass = value;
+                  });
+                },),
+              const SizedBox(height: 20),
+              DropdownMenu(
+                hintText: "Select Year",
+                menuStyle: const MenuStyle(
+                    backgroundColor: MaterialStatePropertyAll(white)),
+                dropdownMenuEntries: Studentyear.map(
+                        (e) => DropdownMenuEntry(value: e, label: e)).toList(),
+                onSelected: (value) {
+                  setState(() {
+                    selectedSyear = value;
+                  });
+                },),
+              const SizedBox(height: 20),
+              DropdownMenu(
+                hintText: "Select Suject",
+                menuStyle: const MenuStyle(
+                    backgroundColor: MaterialStatePropertyAll(white)),
+                dropdownMenuEntries:
+                Subject.map((e) => DropdownMenuEntry(value: e, label: e))
+                    .toList(),
+                onSelected: (value) {
+                  setState(() {
+                    selectedSsub = value;
+                  });
+                },),
+              const SizedBox(height: 20),
               selectedFile == null
                   ? Row(
-                    children: [
-                      Card(
-                          child: Padding(
+                children: [
+                  Card(
+                      elevation: 0,
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0).r,
-                        child: const Text('Choose pdf file '),
+                        child: const Text('Select pdf file '),
                       )),
-                      Expanded(
-                        child: MyButton(btnname: "Pick Pdf", btncolor: white, click: (){
-                          pickFile();
-                        }, bordercolor: customBalck, txtcolor: customBalck),
-                      ),
-                    ],
-                  )
-                  : Row(
-                    children: [
-                      Expanded(
-                        child: Card(child: Padding(
-                          padding: const EdgeInsets.all(8.0).r,
-                          child: Text('Selected File: ${selectedFile!.path}'),
-                        )),
-                      ),
-                      Expanded(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20).r,
+                    child: InkWell(
+                      onTap: pickFile,
+                      child: Card(
+                        color: white,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20).r,
-                          child: MyButton(btnname: "Pick Pdf", btncolor: white, click: (){
-                            pickFile();
-                          }, bordercolor: customBalck, txtcolor: customBalck),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.picture_as_pdf,
+                                color: Colors.red,
+                              ),
+                              SizedBox(
+                                width: 5.h,
+                              ),
+                              const Text("Choose")
+                            ],
+                          ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6).r,
-                  border: Border.all(color: customBalck),
-                  color: white,
-                ),
-                child: DropdownButtonFormField(
-                  hint: const Text("Select year"),
-                  padding: EdgeInsets.symmetric(horizontal: 15.h),
-                  items: Studentyear
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (value) {
-                    selectedSyear = value as String;
-                  },
-                ),
+                ],
+              )
+                  : Row(
+                children: [
+                  Expanded(
+                    child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0).r,
+                          child: Text(
+                              'Selected File: ${selectedFile!.path}'),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20).r,
+                    child: InkWell(
+                      onTap: pickFile,
+                      child: Card(
+                        color: white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.picture_as_pdf,
+                                color: Colors.red,
+                              ),
+                              SizedBox(
+                                width: 5.h,
+                              ),
+                              const Text("Choose")
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6).r,
-                  border: Border.all(color: customBalck),
-                  color: white,
-                ),
-                child: DropdownButtonFormField(
-                  hint: const Text("Select Class"),
-                  padding: EdgeInsets.symmetric(horizontal: 15.h),
-                  items: Studentclass
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (value) {
-                    selectedSclass = value as String;
+              const SizedBox(height: 100),
+              MyButton(
+                  btnname: "Upload Note",
+                  btncolor: customBalck,
+                  click: () {
+                    uploadFile();
                   },
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6).r,
-                  border: Border.all(color: customBalck),
-                  color: white,
-                ),
-                child: DropdownButtonFormField(
-                  hint: const Text("Select Subject"),
-                  padding: EdgeInsets.symmetric(horizontal: 15.h),
-                  items: Subject
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (value) {
-                    selectedSsub = value as String;
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 50),
-              MyButton(btnname: "Upload Note", btncolor: customBalck, click: (){
-                uploadFile();
-              }, bordercolor: customBalck, txtcolor: white)
-
+                  bordercolor: customBalck,
+                  txtcolor: white)
             ],
           ),
         ),
@@ -193,14 +240,14 @@ class _AddNotesState extends State<AddNotes> {
     );
   }
 }
+
 class MyButton extends StatelessWidget {
-  const MyButton(
-      {super.key,
-        required this.btnname,
-        required this.btncolor,
-        required this.click,
-        required this.bordercolor,
-        required this.txtcolor});
+  const MyButton({super.key,
+    required this.btnname,
+    required this.btncolor,
+    required this.click,
+    required this.bordercolor,
+    required this.txtcolor});
 
   final String btnname;
   final Color btncolor;
@@ -217,7 +264,9 @@ class MyButton extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
             border: Border.all(color: bordercolor),
-            borderRadius: BorderRadius.circular(8).r,
+            borderRadius: BorderRadius
+                .circular(8)
+                .r,
             color: btncolor),
         child: Center(
           child: AppText(
@@ -232,8 +281,7 @@ class MyButton extends StatelessWidget {
 }
 
 class AppText extends StatelessWidget {
-  const AppText(
-      //Custom Text Widget.....
+  const AppText(//Custom Text Widget.....
           {super.key,
         required this.text,
         required this.weight,
@@ -256,4 +304,3 @@ class AppText extends StatelessWidget {
     );
   }
 }
-

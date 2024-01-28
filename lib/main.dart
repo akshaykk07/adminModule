@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:untitled10/adminModule/AddNote/addNotes.dart';
 import 'package:untitled10/adminModule/adminDash.dart';
 
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home:StudentList()
+        home:AddNotes()
       ),
       designSize: Size(390, 844),
     );
