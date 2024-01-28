@@ -116,13 +116,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                   },
                   bordercolor: customBalck,
                   txtcolor: white)
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     await addQuestionToFirebase();
-              //     Navigator.pop(context);
-              //   },
-              //   child: const Text('Add Question'),
-              // ),
+
             ],
           ),
         ),
