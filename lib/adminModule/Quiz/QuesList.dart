@@ -111,7 +111,7 @@ class _QuizListState extends State<QuizList> {
            Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AddQues(),
+            builder: (context) => AddQuestionScreen(),
           ));
         },
         child: const Icon(Icons.add),

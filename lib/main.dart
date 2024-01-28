@@ -4,12 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled10/adminModule/AddNote/NoteList.dart';
 import 'package:untitled10/adminModule/AddNote/addNotes.dart';
 import 'package:untitled10/adminModule/adminDash.dart';
+import 'package:untitled10/test.dart';
 
 
 import 'adminModule/Banner/bannerList.dart';
 import 'adminModule/Student/studentList.dart';
 import 'adminModule/Student/viewStudent.dart';
 import 'adminModule/Banner/addBanners.dart';
+
 import 'firebase_options.dart';
 
 
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home:BnnerList()
+        home:AdminDash()
       ),
       designSize: Size(390, 844),
     );

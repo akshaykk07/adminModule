@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'AddNote/NoteList.dart';
 import 'AddNote/addNotes.dart';
 import 'Quiz/QuesList.dart';
-import 'Video/AddVideo.dart';
+
 import 'Banner/addBanners.dart';
 
 const whiteone = Color(0xfff5f6f9);
@@ -49,7 +49,7 @@ class _AdminDashState extends State<AdminDash> {
   ];
 
   List Screens=[
-    AddVideo(),
+    Text("add video"),
     QuizList(),
     NoteList(),
     AddBanners(),
