@@ -7,6 +7,7 @@ import 'AddNote/addNotes.dart';
 import 'Quiz/QuesList.dart';
 
 import 'Banner/addBanners.dart';
+import 'Student/studentList.dart';
 
 const whiteone = Color(0xfff5f6f9);
 const customBalck = Color(0xff000000);
@@ -28,18 +29,14 @@ class _AdminDashState extends State<AdminDash> {
     "https://cdn-icons-png.flaticon.com/128/10354/10354130.png",
     "https://cdn-icons-png.flaticon.com/128/8940/8940669.png",
     "https://cdn-icons-png.flaticon.com/128/9686/9686432.png",
-
     "https://cdn-icons-png.flaticon.com/128/9528/9528844.png",
-
   ];
 
   List services = [
     "Manage Video",
     "Manage Quiz ",
     "Add Notes",
-
     "Add offers",
-
   ];
 
   List pcourse = [
@@ -48,7 +45,7 @@ class _AdminDashState extends State<AdminDash> {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTSrIOorMvDgYd5VunTWbiKuQBz14S417OhQ&usqp=CAU",
   ];
 
-  List Screens=[
+  List Screens = [
     Text("add video"),
     QuizList(),
     NoteList(),
@@ -119,7 +116,11 @@ class _AdminDashState extends State<AdminDash> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StudentList(),
+                      ));
                 },
                 child: Container(
                   height: 300.h,

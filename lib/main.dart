@@ -5,6 +5,7 @@ import 'package:untitled10/adminModule/AddNote/NoteList.dart';
 import 'package:untitled10/adminModule/AddNote/addNotes.dart';
 import 'package:untitled10/adminModule/adminDash.dart';
 import 'package:untitled10/test.dart';
+import 'package:untitled10/test2.dart';
 
 
 import 'adminModule/Banner/bannerList.dart';

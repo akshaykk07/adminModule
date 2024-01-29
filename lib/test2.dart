@@ -7,7 +7,7 @@ const whiteone = Color(0xfff5f6f9);
 const customBalck = Color(0xff000000);
 const white = Color(0xffFFFFFF);
 
-class DashboardScreen extends StatelessWidget {
+class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -293,14 +293,15 @@ class Quizn extends StatefulWidget {
   State<Quizn> createState() => _QuiznState();
 }
 
-var tindex = "0";
-bool crtanwer = false;
-bool wrongan = false;
+
+var groupValue;
 
 class _QuiznState extends State<Quizn> {
+
+
   @override
   Widget build(BuildContext context) {
-    print(tindex);
+
     return Scaffold(
       appBar: AppBar(
         title: AppText(
@@ -310,95 +311,119 @@ class _QuiznState extends State<Quizn> {
             textcolor: customBalck),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20).r,
+        padding:  EdgeInsets.symmetric(horizontal: 20.w),
         child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('questions')
-                .doc('Iky9gpjzmcvUdWSP3jcl')
-                .snapshots(),
-            builder: (context, snapshot) {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 200.h,
-                    width: double.infinity,
-                    child: Center(child: Text(snapshot.data!['question'])),
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            onTap: () {},
-                            title: Text("A. ${snapshot.data!['options'][0]}"),
-                            tileColor: Colors.grey[300],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ListTile(
-                            onTap: () {},
-                            title: Text("B. ${snapshot.data!['options'][1]}"),
-                            tileColor: Colors.grey[300],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ListTile(
-                            selectedTileColor: Colors.blue,
-                            onTap: () {},
-                            title: Text("C. ${snapshot.data!['options'][2]}"),
-                            tileColor: Colors.grey[300],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ListTile(
-                            selectedTileColor: Colors.blue,
-                            onTap: () {
-                              setState(() {
-                                tindex = "4";
-                                print(" tindex${tindex}");
-                              });
-                              if (snapshot.data!['answer'] == tindex) {
-                                print("c ansewr${snapshot.data!['answer']}");
-                                setState(() {
-                                  crtanwer = true;
-                                  print("crt$crtanwer");
-                                });
-                              } else {
-                                // print("c ansewr${snapshot.data!['answer']}");
-                                print("crtt$crtanwer");
-                              }
-                            },
-                            title: Text("D. ${snapshot.data!['options'][3]}"),
-                            tileColor: crtanwer == false
-                                ? Colors.grey[300]
-                                : Colors.green.shade300,
-                          ),
-                          SizedBox(height: 50.h,),
-                          MyButton(
-                              btnname: "Next",
-                              btncolor: customBalck,
-                              click: () {
+          stream: FirebaseFirestore.instance.collection('questions').snapshots(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState==ConnectionState.waiting)
+              {
+                return const CircularProgressIndicator();
+              }
+            final user = snapshot.data?.docs ?? [];
+            // final id=user[index].id;
+            return ListView.builder(
 
-                              },
-                              bordercolor: customBalck,
-                              txtcolor: white)
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }),
+              itemBuilder: (context,index) {
+
+                return SizedBox(
+                  child: Column(
+                      children: [
+
+                        const SizedBox(width: double.infinity,),
+                         Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(user[index]['question'])),
+                        SizedBox(height: 50.h,),
+                        RadioListTile(value: "1",
+                          groupValue: groupValue,
+                          onChanged: (value){
+
+                           if(value==user[index]['answer']){
+                             print("correct answer");
+                           }
+                           else{
+                             print("Wrong answer");
+                           }
+                       setState(() {
+                         groupValue=value;
+                       });
+                          },
+                          title: Text(user[index]['options'][0]),
+                          tileColor: Colors.grey.shade300,),
+                        SizedBox(height: 10.h,),
+                        RadioListTile(value: "2", groupValue: groupValue, onChanged: (value){print(value);},title: Text(user[index]['options'][1]),tileColor: Colors.grey.shade300,),
+                        SizedBox(height: 10.h,),
+                        RadioListTile(value: "3", groupValue: groupValue, onChanged: (value){print(value);},title: Text(user[index]['options'][2]),tileColor: Colors.grey.shade300,),
+                        SizedBox(height: 10.h,),
+                        RadioListTile(value: "4", groupValue: groupValue, onChanged: (value){print(value);},title: Text(user[index]['options'][3]),tileColor: Colors.grey.shade300,)
+                        ,SizedBox(height: 40.h,)
+                  ]),
+                );
+              },
+              itemCount:user.length ,
+            );
+          }
+        ),
       ),
     );
   }
 }
+//import 'package:flutter/material.dart';
+
+
+
+// class TestPage extends StatefulWidget {
+//   @override
+//   _TestPageState createState() => _TestPageState();
+// }
+//
+// class _TestPageState extends State<TestPage> {
+//   List<dynamic> selectedValues = List.filled(4, null); // List to hold selected values for each set
+//
+//   // List of items for the ListView.builder
+//   List<List<String>> itemList = [
+//     ['Set 1 - Item 1', 'Set 1 - Item 2', 'Set 1 - Item 3'],
+//     ['Set 2 - Item 1', 'Set 2 - Item 2', 'Set 2 - Item 3'],
+//     ['Set 3 - Item 1', 'Set 3 - Item 2', 'Set 3 - Item 3'],
+//     ['Set 4 - Item 1', 'Set 3 - Item 2', 'Set 3 - Item 3'],
+//   ];
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Multiple Sets of Radio Buttons'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: itemList.length,
+//         itemBuilder: (context, setIndex) {
+//           return Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: <Widget>[
+//               Text('Set ${setIndex + 1}'),
+//               Column(
+//                 children: List.generate(
+//                   itemList[setIndex].length,
+//                       (index) {
+//                     return ListTile(
+//                       title: Text(itemList[setIndex][index]),
+//                       trailing: Radio<int>(
+//                         value: index,
+//                         groupValue: selectedValues[setIndex],
+//                         onChanged: (value) {
+//                           setState(() {
+//                             selectedValues[setIndex] = value!;
+//                           });
+//                         },
+//                       ),
+//                     );
+//                   },
+//                 ),
+//               ),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
